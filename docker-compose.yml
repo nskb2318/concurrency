@@ -1,6 +1,8 @@
 version: "3"
 services:
   postgres:
+    networks:
+      - concurrent
     image: postgres:14-alpine
     ports:
       - 5431:5432
@@ -8,7 +10,16 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=nfra
+      - POSTGRES_DB=employee
     volumes:
       - /var/lib/postgresql/data
 
+  app:
+    networks:
+      - concurrent
+    depends_on:
+      - postgres
+      -
+networks:
+  concurrent:
+    driver: bridge
