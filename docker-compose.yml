@@ -19,7 +19,6 @@ services:
       - concurrent
     depends_on:
       - postgres
-      -
 networks:
   concurrent:
     driver: bridge

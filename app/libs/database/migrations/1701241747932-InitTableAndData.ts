@@ -20,6 +20,11 @@ export class InitTableAndData1701241747932 implements MigrationInterface {
             length: '255',
             comment: '멤버 이름',
           },
+          {
+            name: 'team_id',
+            type: 'uuid',
+            comment: '팀 ID',
+          },
         ],
       }),
     );
@@ -44,16 +49,31 @@ export class InitTableAndData1701241747932 implements MigrationInterface {
         ],
       }),
     );
+    const result = await queryRunner.query(`
+    insert into team
+    (name)
+    values
+    ('A'),('B'),('C')
+    returning team_id
+    `);
+    console.log(result);
     await queryRunner.query(`
     insert into member
     (name, team_id)
     values
-    ('김','A'),('이','A'),('박','A'),('정','A'),('강','A'),('조','A'),('윤','A'),('장','A'),('임','A'),('한','B'),('오','B'),('서','B'),('신','C')`);
-    await queryRunner.query(`
-    insert into team
-    (name)
-    values
-    ('A'),('B'),('C')`);
+    ('김','${result[0].team_id}'),
+    ('이','${result[0].team_id}'),
+    ('박','${result[0].team_id}'),
+    ('정','${result[0].team_id}'),
+    ('강','${result[0].team_id}'),
+    ('조','${result[0].team_id}'),
+    ('윤','${result[0].team_id}'),
+    ('장','${result[0].team_id}'),
+    ('임','${result[0].team_id}'),
+    ('한','${result[1].team_id}'),
+    ('오','${result[1].team_id}'),
+    ('서','${result[1].team_id}'),
+    ('신','${result[2].team_id}')`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
