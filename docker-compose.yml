@@ -5,7 +5,7 @@ services:
       - concurrent
     image: postgres:14-alpine
     ports:
-      - 5431:5432
+      - 5432:5432
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -13,12 +13,18 @@ services:
       - POSTGRES_DB=employee
     volumes:
       - /var/lib/postgresql/data
+    container_name: 'c_postgres'
 
   app:
+    build:
+      context: app/
     networks:
       - concurrent
+    ports:
+      - 3000:3000
     depends_on:
       - postgres
+    container_name: 'c_app'
+
 networks:
   concurrent:
-    driver: bridge
